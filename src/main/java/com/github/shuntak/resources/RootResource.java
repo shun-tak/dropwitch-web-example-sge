@@ -386,6 +386,102 @@ public class RootResource {
         return new ResponseCommonBody(players);
     }
 
+    @GET
+    @Path("updatePlayerMp")
+    @UnitOfWork
+    public ResponseCommonBody updatePlayerMp(
+            @QueryParam("targetPlayerId") String targetPlayerId,
+            @QueryParam("calcValue") Integer calcValue
+    ) {
+        List<Object> players = playerDao.find(targetPlayerId);
+        Player player = (Player) players.get(0);
+
+        player.setPlayerMp(Math.max(0, Math.min(255, player.getPlayerMp() + calcValue)));
+        playerDao.update(player);
+
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("updatePlayerExp")
+    @UnitOfWork
+    public ResponseCommonBody updatePlayerExp(
+            @QueryParam("targetPlayerId") String targetPlayerId,
+            @QueryParam("calcValue") Integer calcValue
+    ) {
+        List<Object> players = playerDao.find(targetPlayerId);
+        Player player = (Player) players.get(0);
+
+        player.setPlayerExp(Math.max(0, Math.min(65535, player.getPlayerExp() + calcValue)));
+        playerDao.update(player);
+
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("updatePlayerAtk")
+    @UnitOfWork
+    public ResponseCommonBody updatePlayerAtk(
+            @QueryParam("targetPlayerId") String targetPlayerId,
+            @QueryParam("calcValue") Integer calcValue
+    ) {
+        List<Object> players = playerDao.find(targetPlayerId);
+        Player player = (Player) players.get(0);
+
+        player.setPlayerAtk(Math.max(0, Math.min(255, player.getPlayerAtk() + calcValue)));
+        playerDao.update(player);
+
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("updatePlayerDef")
+    @UnitOfWork
+    public ResponseCommonBody updatePlayerDef(
+            @QueryParam("targetPlayerId") String targetPlayerId,
+            @QueryParam("calcValue") Integer calcValue
+    ) {
+        List<Object> players = playerDao.find(targetPlayerId);
+        Player player = (Player) players.get(0);
+
+        player.setPlayerDef(Math.max(0, Math.min(255, player.getPlayerDef() + calcValue)));
+        playerDao.update(player);
+
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("updatePlayerInt")
+    @UnitOfWork
+    public ResponseCommonBody updatePlayerInt(
+            @QueryParam("targetPlayerId") String targetPlayerId,
+            @QueryParam("calcValue") Integer calcValue
+    ) {
+        List<Object> players = playerDao.find(targetPlayerId);
+        Player player = (Player) players.get(0);
+
+        player.setPlayerInt(Math.max(0, Math.min(255, player.getPlayerInt() + calcValue)));
+        playerDao.update(player);
+
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("updatePlayerAgi")
+    @UnitOfWork
+    public ResponseCommonBody updatePlayerAgi(
+            @QueryParam("targetPlayerId") String targetPlayerId,
+            @QueryParam("calcValue") Integer calcValue
+    ) {
+        List<Object> players = playerDao.find(targetPlayerId);
+        Player player = (Player) players.get(0);
+
+        player.setPlayerAgi(Math.max(0, Math.min(255, player.getPlayerAgi() + calcValue)));
+        playerDao.update(player);
+
+        return new ResponseCommonBody(players);
+    }
+
     private void createPlayerLog(String targetPlayerid) {
         PlayerLog log = new PlayerLog();
         log.setPlayerId(targetPlayerid);
