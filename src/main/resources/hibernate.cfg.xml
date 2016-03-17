@@ -10,6 +10,8 @@
         <mapping class="com.github.shuntak.entity.Item"/>
         <mapping class="com.github.shuntak.entity.Map"/>
         <mapping class="com.github.shuntak.entity.Player"/>
+        <mapping class="com.github.shuntak.entity.ItemLog"/>
+        <mapping class="com.github.shuntak.entity.PlayerLog"/>
         <!-- DB schema will be updated if needed -->
         <!-- <property name="hbm2ddl.auto">update</property> -->
     </session-factory>

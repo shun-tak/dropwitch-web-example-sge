@@ -6,17 +6,19 @@ import com.github.shuntak.api.ResponseCommonBody;
 import com.github.shuntak.entity.Item;
 import com.github.shuntak.entity.Map;
 import com.github.shuntak.entity.Player;
-import com.github.shuntak.entity.dao.ItemDao;
-import com.github.shuntak.entity.dao.MapDao;
-import com.github.shuntak.entity.dao.PlayerDao;
+import com.github.shuntak.entity.PlayerLog;
+import com.github.shuntak.entity.dao.*;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +27,20 @@ import java.util.List;
 @Timed
 public class RootResource {
     private ItemDao itemDao;
+    private ItemLogDao itemLogDao;
     private MapDao mapDao;
     private PlayerDao playerDao;
+    private PlayerLogDao playerLogDao;
 
-    public RootResource(ItemDao itemDao, MapDao mapDao, PlayerDao playerDao) {
+    @Context
+    UriInfo uriInfo;
+
+    public RootResource(ItemDao itemDao, ItemLogDao itemLogDao, MapDao mapDao, PlayerDao playerDao, PlayerLogDao playerLogDao) {
         this.itemDao = itemDao;
+        this.itemLogDao = itemLogDao;
         this.mapDao = mapDao;
         this.playerDao = playerDao;
+        this.playerLogDao = playerLogDao;
     }
 
     @GET
@@ -69,6 +78,13 @@ public class RootResource {
             @QueryParam("newPlayerItems") String newPlayerItems,
             @QueryParam("newPlayerMap") String newPlayerMap
     ) {
+        PlayerLog log = new PlayerLog();
+        log.setPlayerId(targetPlayerid);
+        log.setLogDateTime(DateTime.now());
+        log.setApiPath(uriInfo.getPath());
+        log.setApiParam(uriInfo.getRequestUri().getQuery());
+        playerLogDao.save(log);
+
         Player player = (Player) playerDao.find(targetPlayerid).get(0);
         if (newPlayerHp != null) {
             player.setPlayerHp(newPlayerHp);
@@ -213,5 +229,13 @@ public class RootResource {
         }
 
         return new ResponseCommonBody(data);
+    }
+
+    @GET
+    @Path("getPlayerLog")
+    @UnitOfWork
+    public ResponseCommonBody getPlayerLog(@QueryParam("targetPlayerId") String targetPlayerId) {
+        List<Object> logs = playerLogDao.find(targetPlayerId);
+        return new ResponseCommonBody(logs);
     }
 }
