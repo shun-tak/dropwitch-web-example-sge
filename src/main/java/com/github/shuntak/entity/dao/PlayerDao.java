@@ -59,10 +59,107 @@ public class PlayerDao extends AbstractDAO<Player> {
         return new ArrayList<>();
     }
 
+    // TODO orderBy*の共通化
     public List<Object> orderByHp(boolean isAscend) {
         StringBuilder query = new StringBuilder("from Player");
 
         query.append(" order by playerHp");
+        if (isAscend) {
+            query.append(" asc");
+        } else {
+            query.append(" desc");
+        }
+
+        return currentSession()
+                .createQuery(query.toString())
+                .setMaxResults(20)
+                .list();
+    }
+
+    public List<Object> orderByMp(boolean isAscend) {
+        StringBuilder query = new StringBuilder("from Player");
+
+        query.append(" order by playerMp");
+        if (isAscend) {
+            query.append(" asc");
+        } else {
+            query.append(" desc");
+        }
+
+        return currentSession()
+                .createQuery(query.toString())
+                .setMaxResults(20)
+                .list();
+    }
+
+    public List<Object> orderByExp(boolean isAscend) {
+        StringBuilder query = new StringBuilder("from Player");
+
+        query.append(" order by playerExp");
+        if (isAscend) {
+            query.append(" asc");
+        } else {
+            query.append(" desc");
+        }
+
+        return currentSession()
+                .createQuery(query.toString())
+                .setMaxResults(20)
+                .list();
+    }
+
+    public List<Object> orderByAtk(boolean isAscend) {
+        StringBuilder query = new StringBuilder("from Player");
+
+        query.append(" order by playerAtk");
+        if (isAscend) {
+            query.append(" asc");
+        } else {
+            query.append(" desc");
+        }
+
+        return currentSession()
+                .createQuery(query.toString())
+                .setMaxResults(20)
+                .list();
+    }
+
+    public List<Object> orderByDef(boolean isAscend) {
+        StringBuilder query = new StringBuilder("from Player");
+
+        query.append(" order by playerDef");
+        if (isAscend) {
+            query.append(" asc");
+        } else {
+            query.append(" desc");
+        }
+
+        return currentSession()
+                .createQuery(query.toString())
+                .setMaxResults(20)
+                .list();
+    }
+
+    public List<Object> orderByInt(boolean isAscend) {
+        StringBuilder query = new StringBuilder("from Player");
+
+        query.append(" order by playerInt");
+        if (isAscend) {
+            query.append(" asc");
+        } else {
+            query.append(" desc");
+        }
+
+        return currentSession()
+                .createQuery(query.toString())
+                .setMaxResults(20)
+                .list();
+    }
+
+    public List<Object> orderByAgi(boolean isAscend) {
+        StringBuilder query = new StringBuilder("from Player");
+
+        query.append(" order by playerAgi");
         if (isAscend) {
             query.append(" asc");
         } else {

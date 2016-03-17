@@ -492,6 +492,66 @@ public class RootResource {
         return new ResponseCommonBody(players);
     }
 
+    @GET
+    @Path("rankPlayerMp")
+    @UnitOfWork
+    public ResponseCommonBody rankPlayerMp(
+            @QueryParam("isAscend") boolean isAscend
+    ) {
+        List<Object> players = playerDao.orderByMp(isAscend);
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("rankPlayerExp")
+    @UnitOfWork
+    public ResponseCommonBody rankPlayerExp(
+            @QueryParam("isAscend") boolean isAscend
+    ) {
+        List<Object> players = playerDao.orderByExp(isAscend);
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("rankPlayerAtk")
+    @UnitOfWork
+    public ResponseCommonBody rankPlayerAtk(
+            @QueryParam("isAscend") boolean isAscend
+    ) {
+        List<Object> players = playerDao.orderByAtk(isAscend);
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("rankPlayerDef")
+    @UnitOfWork
+    public ResponseCommonBody rankPlayerDef(
+            @QueryParam("isAscend") boolean isAscend
+    ) {
+        List<Object> players = playerDao.orderByDef(isAscend);
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("rankPlayerInt")
+    @UnitOfWork
+    public ResponseCommonBody rankPlayerInt(
+            @QueryParam("isAscend") boolean isAscend
+    ) {
+        List<Object> players = playerDao.orderByInt(isAscend);
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("rankPlayerAgi")
+    @UnitOfWork
+    public ResponseCommonBody rankPlayerAgi(
+            @QueryParam("isAscend") boolean isAscend
+    ) {
+        List<Object> players = playerDao.orderByAgi(isAscend);
+        return new ResponseCommonBody(players);
+    }
+
     private void createPlayerLog(String targetPlayerid) {
         PlayerLog log = new PlayerLog();
         log.setPlayerId(targetPlayerid);
