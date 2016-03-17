@@ -101,4 +101,13 @@ public class RootResource {
         data.add(player);
         return new ResponseCommonBody(data);
     }
+
+    @GET
+    @Path("readMap")
+    @UnitOfWork
+    public ResponseCommonBody readMap(@QueryParam("targetMapId") String targetMapId) {
+        List<Object> maps = mapDao.find(targetMapId);
+
+        return new ResponseCommonBody(maps);
+    }
 }
