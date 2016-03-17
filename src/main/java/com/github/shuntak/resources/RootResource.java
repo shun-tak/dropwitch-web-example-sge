@@ -10,6 +10,7 @@ import com.github.shuntak.entity.dao.ItemDao;
 import com.github.shuntak.entity.dao.MapDao;
 import com.github.shuntak.entity.dao.PlayerDao;
 import io.dropwizard.hibernate.UnitOfWork;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -172,5 +173,45 @@ public class RootResource {
 
         players = playerDao.findByItemId(targetItemId);
         return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("switchItemOwner")
+    @UnitOfWork
+    public ResponseCommonBody switchItemOwner(
+            @QueryParam("targetItemId") String targetItemId,
+            @QueryParam("newItemOwner") String newItemOwner
+    ) {
+        List<Object> data = new ArrayList<>();
+
+        if (StringUtils.startsWith(newItemOwner, "U")) {
+            List<Object> players = playerDao.find(newItemOwner);
+            if (players.isEmpty()) {
+                return new ResponseCommonBody(data);
+            }
+
+            Player player = (Player) players.get(0);
+            player.setPlayerItemsString(player.getPlayerItemsString() + "," + targetItemId);
+            playerDao.update(player);
+
+            data.add(player);
+            return new ResponseCommonBody(data);
+        }
+
+        if (StringUtils.startsWith(newItemOwner, "M")) {
+            List<Object> maps = mapDao.find(newItemOwner);
+            if (maps.isEmpty()) {
+                return new ResponseCommonBody(data);
+            }
+
+            Map map = (Map) maps.get(0);
+            map.setMapItemsString(map.getMapItemsString() + "," + targetItemId);
+            mapDao.update(map);
+
+            data.add(map);
+            return new ResponseCommonBody(data);
+        }
+
+        return new ResponseCommonBody(data);
     }
 }
