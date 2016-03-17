@@ -562,6 +562,16 @@ public class RootResource {
         return new ResponseCommonBody(items);
     }
 
+    @GET
+    @Path("listPlayerOnMap")
+    @UnitOfWork
+    public ResponseCommonBody listPlayerOnMap(
+            @QueryParam("targetMapId") String targetMapId
+    ) {
+        List<Object> players = playerDao.findByMap(targetMapId);
+        return new ResponseCommonBody(players);
+    }
+
     private void createPlayerLog(String targetPlayerid) {
         PlayerLog log = new PlayerLog();
         log.setPlayerId(targetPlayerid);

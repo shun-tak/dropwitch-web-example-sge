@@ -171,4 +171,17 @@ public class PlayerDao extends AbstractDAO<Player> {
                 .setMaxResults(20)
                 .list();
     }
+
+    public List<Object> findByMap(String targetMapId) {
+        StringBuilder query = new StringBuilder("from Player");
+
+        query.append(" where playerMap ='");
+        query.append(targetMapId);
+        query.append("'");
+
+        return currentSession()
+                .createQuery(query.toString())
+                .setMaxResults(20)
+                .list();
+    }
 }
