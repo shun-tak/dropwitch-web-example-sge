@@ -40,5 +40,3 @@ Then, open in browser: [localhost:8080](http://localhost:8080/)
 |--------|----------------|--------------------------|
 | GET    | /master        | Get master data          |
 | DELETE | /master/cache  | Delete master data cache |
-| POST   | /user/register | Create user              |
-| GET    | /user          | Get user                 |
