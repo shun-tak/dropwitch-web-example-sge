@@ -89,7 +89,7 @@ public class RootResource {
             player.setPlayerAgi(newPlayerAgi);
         }
         if (newPlayerItems != null) {
-            player.setPlayerItems(newPlayerItems);
+            player.setPlayerItemsString(newPlayerItems);
         }
         if (newPlayerMap != null) {
             player.setPlayerMap(newPlayerMap);

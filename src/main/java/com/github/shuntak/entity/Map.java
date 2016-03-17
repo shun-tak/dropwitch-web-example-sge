@@ -1,9 +1,13 @@
 package com.github.shuntak.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.persistence.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name="map")
@@ -44,28 +48,56 @@ public class Map {
         this.mapType = mapType;
     }
 
-    private String mapNext;
+    @JsonIgnore
+    private String mapNextString;
+
+    @JsonProperty("mapNext")
+    private List<String> mapNext;
 
     @Basic
     @javax.persistence.Column(name = "mapNext", nullable = true, length = -1)
-    public String getMapNext() {
-        return mapNext;
+    public String getMapNextString() {
+        return mapNextString;
+    }
+
+    public void setMapNextString(String mapNext) {
+        setMapNext(mapNext);
+    }
+
+    @Transient
+    public List<String> getMapNext() {
+        return this.mapNext;
     }
 
     public void setMapNext(String mapNext) {
-        this.mapNext = mapNext;
+        this.mapNextString = mapNext;
+        this.mapNext = Stream.of(StringUtils.split(mapNext, ",")).collect(Collectors.toList());
     }
 
-    private String mapItems;
+    @JsonIgnore
+    private String mapItemsString;
+
+    @JsonProperty("mapItems")
+    private List<String> mapItems;
 
     @Basic
     @javax.persistence.Column(name = "mapItems", nullable = true, length = -1)
-    public String getMapItems() {
-        return mapItems;
+    public String getMapItemsString() {
+        return mapItemsString;
+    }
+
+    public void setMapItemsString(String mapItems) {
+        setMapItems(mapItems);
+    }
+
+    @Transient
+    public List<String> getMapItems() {
+        return this.mapItems;
     }
 
     public void setMapItems(String mapItems) {
-        this.mapItems = mapItems;
+        this.mapItemsString = mapItems;
+        this.mapItems = Stream.of(StringUtils.split(mapItems, ",")).collect(Collectors.toList());
     }
 
     @Override
@@ -78,8 +110,8 @@ public class Map {
         if (mapId != null ? !mapId.equals(map.mapId) : map.mapId != null) return false;
         if (mapName != null ? !mapName.equals(map.mapName) : map.mapName != null) return false;
         if (mapType != null ? !mapType.equals(map.mapType) : map.mapType != null) return false;
-        if (mapNext != null ? !mapNext.equals(map.mapNext) : map.mapNext != null) return false;
-        if (mapItems != null ? !mapItems.equals(map.mapItems) : map.mapItems != null) return false;
+        if (mapNextString != null ? !mapNextString.equals(map.mapNextString) : map.mapNextString != null) return false;
+        if (mapItemsString != null ? !mapItemsString.equals(map.mapItemsString) : map.mapItemsString != null) return false;
 
         return true;
     }
@@ -89,8 +121,8 @@ public class Map {
         int result = mapId != null ? mapId.hashCode() : 0;
         result = 31 * result + (mapName != null ? mapName.hashCode() : 0);
         result = 31 * result + (mapType != null ? mapType.hashCode() : 0);
-        result = 31 * result + (mapNext != null ? mapNext.hashCode() : 0);
-        result = 31 * result + (mapItems != null ? mapItems.hashCode() : 0);
+        result = 31 * result + (mapNextString != null ? mapNextString.hashCode() : 0);
+        result = 31 * result + (mapItemsString != null ? mapItemsString.hashCode() : 0);
         return result;
     }
 }

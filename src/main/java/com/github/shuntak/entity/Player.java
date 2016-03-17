@@ -1,9 +1,13 @@
 package com.github.shuntak.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.persistence.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name="player")
@@ -116,16 +120,30 @@ public class Player {
         this.playerAgi = playerAgi;
     }
 
-    private String playerItems;
+    @JsonIgnore
+    private String playerItemsString;
+
+    @JsonProperty("playerItems")
+    private List<String> playerItems;
 
     @Basic
     @javax.persistence.Column(name = "playerItems", nullable = true, length = -1)
-    public String getPlayerItems() {
-        return playerItems;
+    public String getPlayerItemsString() {
+        return playerItemsString;
+    }
+
+    public void setPlayerItemsString(String playerItems) {
+        setPlayerItems(playerItems);
+    }
+
+    @Transient
+    public List<String> getPlayerItems() {
+        return this.playerItems;
     }
 
     public void setPlayerItems(String playerItems) {
-        this.playerItems = playerItems;
+        this.playerItemsString = playerItems;
+        this.playerItems = Stream.of(StringUtils.split(playerItems, ",")).collect(Collectors.toList());
     }
 
     private String playerMap;
@@ -156,7 +174,7 @@ public class Player {
         if (playerDef != null ? !playerDef.equals(player.playerDef) : player.playerDef != null) return false;
         if (playerInt != null ? !playerInt.equals(player.playerInt) : player.playerInt != null) return false;
         if (playerAgi != null ? !playerAgi.equals(player.playerAgi) : player.playerAgi != null) return false;
-        if (playerItems != null ? !playerItems.equals(player.playerItems) : player.playerItems != null) return false;
+        if (playerItemsString != null ? !playerItemsString.equals(player.playerItemsString) : player.playerItemsString != null) return false;
         if (playerMap != null ? !playerMap.equals(player.playerMap) : player.playerMap != null) return false;
 
         return true;
@@ -173,7 +191,7 @@ public class Player {
         result = 31 * result + (playerDef != null ? playerDef.hashCode() : 0);
         result = 31 * result + (playerInt != null ? playerInt.hashCode() : 0);
         result = 31 * result + (playerAgi != null ? playerAgi.hashCode() : 0);
-        result = 31 * result + (playerItems != null ? playerItems.hashCode() : 0);
+        result = 31 * result + (playerItemsString != null ? playerItemsString.hashCode() : 0);
         result = 31 * result + (playerMap != null ? playerMap.hashCode() : 0);
         return result;
     }
