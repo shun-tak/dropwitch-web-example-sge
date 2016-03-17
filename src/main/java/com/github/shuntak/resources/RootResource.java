@@ -370,6 +370,22 @@ public class RootResource {
         return new ResponseCommonBody(players);
     }
 
+    @GET
+    @Path("updatePlayerHp")
+    @UnitOfWork
+    public ResponseCommonBody updatePlayerHp(
+            @QueryParam("targetPlayerId") String targetPlayerId,
+            @QueryParam("calcValue") Integer calcValue
+    ) {
+        List<Object> players = playerDao.find(targetPlayerId);
+        Player player = (Player) players.get(0);
+
+        player.setPlayerHp(Math.max(0, Math.min(255, player.getPlayerHp() + calcValue)));
+        playerDao.update(player);
+
+        return new ResponseCommonBody(players);
+    }
+
     private void createPlayerLog(String targetPlayerid) {
         PlayerLog log = new PlayerLog();
         log.setPlayerId(targetPlayerid);
