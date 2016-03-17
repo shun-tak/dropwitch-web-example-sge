@@ -1,11 +1,9 @@
 package com.github.shuntak.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name="item")
 public class Item {
     private String itemId;
     private String itemName;

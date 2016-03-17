@@ -3,6 +3,7 @@ package com.github.shuntak.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.shuntak.api.ResponseCommonBody;
+import com.github.shuntak.entity.Player;
 import com.github.shuntak.entity.dao.ItemDao;
 import com.github.shuntak.entity.dao.MapDao;
 import com.github.shuntak.entity.dao.PlayerDao;
@@ -50,4 +51,54 @@ public class RootResource {
         return new ResponseCommonBody(players);
     }
 
+    @GET
+    @Path("updatePlayer")
+    @UnitOfWork
+    public ResponseCommonBody updatePlayer(
+            @QueryParam("targetPlayerId") String targetPlayerid,
+            @QueryParam("newPlayerHp") Integer newPlayerHp,
+            @QueryParam("newPlayerMp") Integer newPlayerMp,
+            @QueryParam("newPlayerExp") Integer newPlayerExp,
+            @QueryParam("newPlayerAtk") Integer newPlayerAtk,
+            @QueryParam("newPlayerDef") Integer newPlayerDef,
+            @QueryParam("newPlayerInt") Integer newPlayerInt,
+            @QueryParam("newPlayerAgi") Integer newPlayerAgi,
+            @QueryParam("newPlayerItems") String newPlayerItems,
+            @QueryParam("newPlayerMap") String newPlayerMap
+    ) {
+        Player player = (Player) playerDao.find(targetPlayerid).get(0);
+        if (newPlayerHp != null) {
+            player.setPlayerHp(newPlayerHp);
+        }
+        if (newPlayerMp != null) {
+            player.setPlayerMp(newPlayerMp);
+        }
+        if (newPlayerExp != null) {
+            player.setPlayerExp(newPlayerExp);
+        }
+        if (newPlayerAtk != null) {
+            player.setPlayerAtk(newPlayerAtk);
+        }
+        if (newPlayerDef != null) {
+            player.setPlayerDef(newPlayerDef);
+        }
+        if (newPlayerInt != null) {
+            player.setPlayerInt(newPlayerInt);
+        }
+        if (newPlayerAgi != null) {
+            player.setPlayerAgi(newPlayerAgi);
+        }
+        if (newPlayerItems != null) {
+            player.setPlayerItems(newPlayerItems);
+        }
+        if (newPlayerMap != null) {
+            player.setPlayerMap(newPlayerMap);
+        }
+
+        playerDao.update(player);
+
+        List<Object> data = new ArrayList<>();
+        data.add(player);
+        return new ResponseCommonBody(data);
+    }
 }

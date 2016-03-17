@@ -32,4 +32,8 @@ public class PlayerDao extends AbstractDAO<Player> {
                 .createQuery(query.toString())
                 .list();
     }
+
+    public void update(Player player) {
+        currentSession().update(player);
+    }
 }

@@ -3,8 +3,10 @@ package com.github.shuntak.entity;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="map")
 public class Map {
     private String mapId;
 
