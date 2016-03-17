@@ -32,4 +32,8 @@ public class ItemDao extends AbstractDAO<Item> {
                 .createQuery(query.toString())
                 .list();
     }
+
+    public void update(Item item) {
+        currentSession().update(item);
+    }
 }

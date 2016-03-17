@@ -139,4 +139,23 @@ public class RootResource {
         List<Object> data = itemDao.find(targetItemId);
         return new ResponseCommonBody(data);
     }
+
+    @GET
+    @Path("updateItem")
+    @UnitOfWork
+    public ResponseCommonBody updateItem(
+            @QueryParam("targetItemId") String targetItemId,
+            @QueryParam("newItemValue") Integer newItemValue
+    ) {
+        Item item = (Item) itemDao.find(targetItemId).get(0);
+        if (newItemValue != null) {
+            item.setItemValue(newItemValue);
+        }
+
+        itemDao.update(item);
+
+        List<Object> data = new ArrayList<>();
+        data.add(item);
+        return new ResponseCommonBody(data);
+    }
 }
