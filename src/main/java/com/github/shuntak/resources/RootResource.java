@@ -75,12 +75,7 @@ public class RootResource {
             @QueryParam("newPlayerItems") String newPlayerItems,
             @QueryParam("newPlayerMap") String newPlayerMap
     ) {
-        PlayerLog log = new PlayerLog();
-        log.setPlayerId(targetPlayerid);
-        log.setLogDateTime(DateTime.now());
-        log.setApiPath(uriInfo.getPath());
-        log.setApiParam(uriInfo.getRequestUri().getQuery());
-        playerLogDao.save(log);
+        createPlayerLog(targetPlayerid);
 
         Player player = (Player) playerDao.find(targetPlayerid).get(0);
         if (newPlayerHp != null) {
@@ -161,12 +156,7 @@ public class RootResource {
             @QueryParam("targetItemId") String targetItemId,
             @QueryParam("newItemValue") Integer newItemValue
     ) {
-        ItemLog log = new ItemLog();
-        log.setItemId(targetItemId);
-        log.setLogDateTime(DateTime.now());
-        log.setApiPath(uriInfo.getPath());
-        log.setApiParam(uriInfo.getRequestUri().getQuery());
-        itemLogDao.save(log);
+        createItemLog(targetItemId);
 
         Item item = (Item) itemDao.find(targetItemId).get(0);
         if (newItemValue != null) {
@@ -209,6 +199,8 @@ public class RootResource {
             if (players.isEmpty()) {
                 return new ResponseCommonBody(data);
             }
+            createPlayerLog(newItemOwner);
+            createItemLog(targetItemId);
 
             Player player = (Player) players.get(0);
             player.setPlayerItemsString(player.getPlayerItemsString() + "," + targetItemId);
@@ -223,6 +215,7 @@ public class RootResource {
             if (maps.isEmpty()) {
                 return new ResponseCommonBody(data);
             }
+            createItemLog(targetItemId);
 
             Map map = (Map) maps.get(0);
             map.setMapItemsString(map.getMapItemsString() + "," + targetItemId);
@@ -249,5 +242,23 @@ public class RootResource {
     public ResponseCommonBody getItemLog(@QueryParam("targetItemId") String targetItemId) {
         List<Object> logs = itemLogDao.find(targetItemId);
         return new ResponseCommonBody(logs);
+    }
+
+    private void createPlayerLog(String targetPlayerid) {
+        PlayerLog log = new PlayerLog();
+        log.setPlayerId(targetPlayerid);
+        log.setLogDateTime(DateTime.now());
+        log.setApiPath(uriInfo.getPath());
+        log.setApiParam(uriInfo.getRequestUri().getQuery());
+        playerLogDao.save(log);
+    }
+
+    private void createItemLog(String targetItemId) {
+        ItemLog log = new ItemLog();
+        log.setItemId(targetItemId);
+        log.setLogDateTime(DateTime.now());
+        log.setApiPath(uriInfo.getPath());
+        log.setApiParam(uriInfo.getRequestUri().getQuery());
+        itemLogDao.save(log);
     }
 }
