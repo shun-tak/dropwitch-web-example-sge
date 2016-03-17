@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Path("/")
 @Produces({MediaType.APPLICATION_JSON, "application/x-msgpack"})
@@ -275,6 +276,44 @@ public class RootResource {
 
         // なかったらresult: false
         return new ResponseCommonBody();
+    }
+
+    @GET
+    @Path("exploreMap")
+    @UnitOfWork
+    public ResponseCommonBody exploreMap(
+            @QueryParam("targetPlayerId") String targetPlayerId
+    ) {
+        List<Object> players = playerDao.find(targetPlayerId);
+        Player player = (Player) players.get(0);
+        Map map = (Map) mapDao.find(player.getPlayerMap()).get(0);
+        List<String> items = map.getMapItems();
+        if (items.isEmpty()) {
+            return new ResponseCommonBody();
+        }
+
+        String getItem = items.remove(0);
+        createPlayerLog(targetPlayerId);
+        createItemLog(getItem);
+
+        String itemString = "";
+        for (String item : map.getMapItems()) {
+            if (itemString.equals("")) {
+                itemString += item;
+            } else {
+                itemString += "," + item;
+            }
+        }
+        map.setMapItemsString(itemString);
+        mapDao.update(map);
+
+        player.setPlayerItemsString(player.getPlayerItemsString() + "," + getItem);
+        playerDao.update(player);
+
+        Item item = (Item) itemDao.find(getItem).get(0);
+        item.setItemValue(Math.max(0, item.getItemValue() - 10));
+
+        return new ResponseCommonBody(players);
     }
 
     private void createPlayerLog(String targetPlayerid) {
