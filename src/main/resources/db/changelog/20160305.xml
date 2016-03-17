@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="alter-table-user" author="shun-tak">
+        <renameColumn tableName="user" oldColumnName="id" newColumnName="userId" columnDataType="varchar(255)" />
+        <dropColumn tableName="user" columnName="name" />
+        <dropColumn tableName="user" columnName="created_at" />
+        <dropColumn tableName="user" columnName="updated_at" />
+        <addColumn tableName="user">
+            <column name="userNo" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="userPublicScore" type="int" defaultValueNumeric="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="userFriends" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="userImage" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="create-table-item" author="shun-tak">
+        <createTable tableName="item">
+            <column name="itemId" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="itemNo" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="itemSupplier" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="itemSoldQuantity" type="int" defaultValueNumeric="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="itemSalePrice" type="int" defaultValueNumeric="1">
+                <constraints nullable="false" />
+            </column>
+            <column name="itemTags" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="itemImage" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-post" author="shun-tak">
+        <createTable tableName="post">
+            <column name="postId" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="postDateTime" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postUserId" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postItemId" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postItemScore" type="int" defaultValue="0">
+                <constraints nullable="false" />
+            </column>
+            <column name="postItemState" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postLikeUsers" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postTags" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
