@@ -2,15 +2,20 @@ package com.github.shuntak.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.HashMap;
 
 @Entity
 public class PlayerLog {
     private String playerId;
     private String apiPath;
+    @JsonIgnore
     private String apiParam;
+    @JsonProperty("apiParam")
+    private HashMap<String, String> apiParamMap = new HashMap<>();
     @JsonIgnore
     private DateTime logDateTime;
     @JsonProperty("logDateTime")
@@ -44,6 +49,15 @@ public class PlayerLog {
 
     public void setApiParam(String apiParam) {
         this.apiParam = apiParam;
+        for (String param : StringUtils.split(apiParam, "&")) {
+            String[] keyVal = StringUtils.split(param, "=");
+            apiParamMap.put(keyVal[0], keyVal[1]);
+        }
+    }
+
+    @Transient
+    public HashMap<String, String> getApiParamMap() {
+        return apiParamMap;
     }
 
     @Basic
