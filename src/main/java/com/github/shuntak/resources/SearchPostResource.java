@@ -3,8 +3,6 @@ package com.github.shuntak.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.github.shuntak.api.ResponseCommonBody;
 import com.github.shuntak.entity.dao.ItemDao;
-import com.github.shuntak.entity.dao.PostDao;
-import com.github.shuntak.entity.dao.UserDao;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
@@ -18,13 +16,9 @@ import java.util.ArrayList;
 @Timed
 public class SearchPostResource {
     private ItemDao itemDao;
-    private PostDao postDao;
-    private UserDao userDao;
 
-    public SearchPostResource(ItemDao itemDao, PostDao postDao, UserDao userDao) {
+    public SearchPostResource(ItemDao itemDao) {
         this.itemDao = itemDao;
-        this.postDao = postDao;
-        this.userDao = userDao;
     }
 
     @GET

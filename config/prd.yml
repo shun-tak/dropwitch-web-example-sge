@@ -1,7 +1,7 @@
 database:
   driverClass: com.mysql.jdbc.Driver
-  user: root
-  password:
+  user: tqdbuser
+  password: hoge
   url: jdbc:mysql://localhost/tquest
 
   properties:

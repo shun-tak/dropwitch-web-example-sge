@@ -8,15 +8,14 @@ import javax.persistence.Id;
 @Entity
 public class Item {
     private String itemId;
-    private Long itemNo;
-    private String itemSupplier;
-    private Integer itemSoldQuantity;
-    private Integer itemSalePrice;
-    private String itemTags;
-    private String itemImage;
+    private String itemName;
+    private String itemType;
+    private Integer itemValue;
+    private String itemEffectTarget;
+    private Integer itemEffectValue;
 
     @Id
-    @Column(name = "itemId")
+    @Column(name = "itemId", nullable = true, length = 34)
     public String getItemId() {
         return itemId;
     }
@@ -26,63 +25,53 @@ public class Item {
     }
 
     @Basic
-    @Column(name = "itemNo")
-    public Long getItemNo() {
-        return itemNo;
+    @Column(name = "itemName", nullable = true, length = -1)
+    public String getItemName() {
+        return itemName;
     }
 
-    public void setItemNo(Long itemNo) {
-        this.itemNo = itemNo;
-    }
-
-    @Basic
-    @Column(name = "itemSupplier")
-    public String getItemSupplier() {
-        return itemSupplier;
-    }
-
-    public void setItemSupplier(String itemSupplier) {
-        this.itemSupplier = itemSupplier;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     @Basic
-    @Column(name = "itemSoldQuantity")
-    public Integer getItemSoldQuantity() {
-        return itemSoldQuantity;
+    @Column(name = "itemType", nullable = true, length = -1)
+    public String getItemType() {
+        return itemType;
     }
 
-    public void setItemSoldQuantity(Integer itemSoldQuantity) {
-        this.itemSoldQuantity = itemSoldQuantity;
-    }
-
-    @Basic
-    @Column(name = "itemSalePrice")
-    public Integer getItemSalePrice() {
-        return itemSalePrice;
-    }
-
-    public void setItemSalePrice(Integer itemSalePrice) {
-        this.itemSalePrice = itemSalePrice;
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 
     @Basic
-    @Column(name = "itemTags")
-    public String getItemTags() {
-        return itemTags;
+    @Column(name = "itemValue", nullable = true)
+    public Integer getItemValue() {
+        return itemValue;
     }
 
-    public void setItemTags(String itemTags) {
-        this.itemTags = itemTags;
+    public void setItemValue(Integer itemValue) {
+        this.itemValue = itemValue;
     }
 
     @Basic
-    @Column(name = "itemImage")
-    public String getItemImage() {
-        return itemImage;
+    @Column(name = "itemEffectTarget", nullable = true, length = 255)
+    public String getItemEffectTarget() {
+        return itemEffectTarget;
     }
 
-    public void setItemImage(String itemImage) {
-        this.itemImage = itemImage;
+    public void setItemEffectTarget(String itemEffectTarget) {
+        this.itemEffectTarget = itemEffectTarget;
+    }
+
+    @Basic
+    @Column(name = "itemEffectValue", nullable = true)
+    public Integer getItemEffectValue() {
+        return itemEffectValue;
+    }
+
+    public void setItemEffectValue(Integer itemEffectValue) {
+        this.itemEffectValue = itemEffectValue;
     }
 
     @Override
@@ -93,14 +82,13 @@ public class Item {
         Item item = (Item) o;
 
         if (itemId != null ? !itemId.equals(item.itemId) : item.itemId != null) return false;
-        if (itemNo != null ? !itemNo.equals(item.itemNo) : item.itemNo != null) return false;
-        if (itemSupplier != null ? !itemSupplier.equals(item.itemSupplier) : item.itemSupplier != null) return false;
-        if (itemSoldQuantity != null ? !itemSoldQuantity.equals(item.itemSoldQuantity) : item.itemSoldQuantity != null)
+        if (itemName != null ? !itemName.equals(item.itemName) : item.itemName != null) return false;
+        if (itemType != null ? !itemType.equals(item.itemType) : item.itemType != null) return false;
+        if (itemValue != null ? !itemValue.equals(item.itemValue) : item.itemValue != null) return false;
+        if (itemEffectTarget != null ? !itemEffectTarget.equals(item.itemEffectTarget) : item.itemEffectTarget != null)
             return false;
-        if (itemSalePrice != null ? !itemSalePrice.equals(item.itemSalePrice) : item.itemSalePrice != null)
+        if (itemEffectValue != null ? !itemEffectValue.equals(item.itemEffectValue) : item.itemEffectValue != null)
             return false;
-        if (itemTags != null ? !itemTags.equals(item.itemTags) : item.itemTags != null) return false;
-        if (itemImage != null ? !itemImage.equals(item.itemImage) : item.itemImage != null) return false;
 
         return true;
     }
@@ -108,12 +96,11 @@ public class Item {
     @Override
     public int hashCode() {
         int result = itemId != null ? itemId.hashCode() : 0;
-        result = 31 * result + (itemNo != null ? itemNo.hashCode() : 0);
-        result = 31 * result + (itemSupplier != null ? itemSupplier.hashCode() : 0);
-        result = 31 * result + (itemSoldQuantity != null ? itemSoldQuantity.hashCode() : 0);
-        result = 31 * result + (itemSalePrice != null ? itemSalePrice.hashCode() : 0);
-        result = 31 * result + (itemTags != null ? itemTags.hashCode() : 0);
-        result = 31 * result + (itemImage != null ? itemImage.hashCode() : 0);
+        result = 31 * result + (itemName != null ? itemName.hashCode() : 0);
+        result = 31 * result + (itemType != null ? itemType.hashCode() : 0);
+        result = 31 * result + (itemValue != null ? itemValue.hashCode() : 0);
+        result = 31 * result + (itemEffectTarget != null ? itemEffectTarget.hashCode() : 0);
+        result = 31 * result + (itemEffectValue != null ? itemEffectValue.hashCode() : 0);
         return result;
     }
 }
