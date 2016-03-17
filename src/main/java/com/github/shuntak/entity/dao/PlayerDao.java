@@ -5,11 +5,18 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SessionFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerDao extends AbstractDAO<Player> {
     public PlayerDao(SessionFactory factory) {
         super(factory);
+    }
+
+    public List<Object> findAll() {
+        return currentSession()
+                .createQuery("from Player")
+                .list();
     }
 
     public List<Object> find(String targetPlayerId) {
@@ -35,5 +42,20 @@ public class PlayerDao extends AbstractDAO<Player> {
 
     public void update(Player player) {
         currentSession().update(player);
+    }
+
+    public List<Object> findByItemId(String targetItemId) {
+        List<Object> players = findAll();
+        for (Object player : players) {
+            List<String> playerItems = ((Player) player).getPlayerItems();
+            for (String item : playerItems) {
+                if (item.equals(targetItemId)) {
+                    List<Object> ret = new ArrayList<>();
+                    ret.add(player);
+                    return ret;
+                }
+            }
+        }
+        return new ArrayList<>();
     }
 }

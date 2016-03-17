@@ -158,4 +158,19 @@ public class RootResource {
         data.add(item);
         return new ResponseCommonBody(data);
     }
+
+    @GET
+    @Path("findItemOwner")
+    @UnitOfWork
+    public ResponseCommonBody findItemOwner(@QueryParam("targetItemId") String targetItemId) {
+        List<Object> players;
+        List<Object> maps = mapDao.findByItemId(targetItemId);
+
+        if (!maps.isEmpty()) {
+            return new ResponseCommonBody(maps);
+        }
+
+        players = playerDao.findByItemId(targetItemId);
+        return new ResponseCommonBody(players);
+    }
 }
