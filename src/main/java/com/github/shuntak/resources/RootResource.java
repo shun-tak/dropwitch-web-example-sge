@@ -3,6 +3,7 @@ package com.github.shuntak.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.shuntak.api.ResponseCommonBody;
+import com.github.shuntak.entity.Map;
 import com.github.shuntak.entity.Player;
 import com.github.shuntak.entity.dao.ItemDao;
 import com.github.shuntak.entity.dao.MapDao;
@@ -109,5 +110,24 @@ public class RootResource {
         List<Object> maps = mapDao.find(targetMapId);
 
         return new ResponseCommonBody(maps);
+    }
+
+    @GET
+    @Path("updateMap")
+    @UnitOfWork
+    public ResponseCommonBody updateMap(
+            @QueryParam("targetMapId") String targetMapId,
+            @QueryParam("newMapItems") String newMapItems
+    ) {
+        Map map = (Map) mapDao.find(targetMapId).get(0);
+        if (newMapItems != null) {
+            map.setMapItemsString(newMapItems);
+        }
+
+        mapDao.update(map);
+
+        List<Object> data = new ArrayList<>();
+        data.add(map);
+        return new ResponseCommonBody(data);
     }
 }

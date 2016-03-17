@@ -32,4 +32,8 @@ public class MapDao extends AbstractDAO<Map> {
                 .createQuery(query.toString())
                 .list();
     }
+
+    public void update(Map map) {
+        currentSession().update(map);
+    }
 }
