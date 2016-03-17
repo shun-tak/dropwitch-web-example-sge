@@ -244,6 +244,39 @@ public class RootResource {
         return new ResponseCommonBody(logs);
     }
 
+    @GET
+    @Path("movePlayer")
+    @UnitOfWork
+    public ResponseCommonBody movePlayer(
+            @QueryParam("targetPlayerId") String targetPlayerId,
+            @QueryParam("newPlayerMap") String newPlayerMap
+    ) {
+        List<Object> players = playerDao.find(targetPlayerId);
+        Player player = (Player) players.get(0);
+
+        // 現在地と目的地が同じなら更新
+        if (newPlayerMap.equals(player.getPlayerMap())) {
+            createPlayerLog(targetPlayerId);
+            player.setPlayerMap(newPlayerMap);
+            playerDao.update(player);
+            return new ResponseCommonBody(players);
+        }
+
+        Map currentMap = (Map) mapDao.find(player.getPlayerMap()).get(0);
+
+        for (String nextMap : currentMap.getMapNext()) {
+            if (nextMap.equals(newPlayerMap)) {
+                createPlayerLog(targetPlayerId);
+                player.setPlayerMap(newPlayerMap);
+                playerDao.update(player);
+                return new ResponseCommonBody(players);
+            }
+        }
+
+        // なかったらresult: false
+        return new ResponseCommonBody();
+    }
+
     private void createPlayerLog(String targetPlayerid) {
         PlayerLog log = new PlayerLog();
         log.setPlayerId(targetPlayerid);
