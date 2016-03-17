@@ -11,6 +11,7 @@ import com.github.shuntak.entity.dao.MapDao;
 import com.github.shuntak.entity.dao.MasterCommonDao;
 import com.github.shuntak.entity.dao.PlayerDao;
 import com.github.shuntak.resources.MasterResource;
+import com.github.shuntak.resources.RootResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -86,5 +87,6 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
 
         environment.jersey().register(JacksonMessagePackProvider.class);
         environment.jersey().register(new MasterResource(masterCommonDao));
+        environment.jersey().register(new RootResource());
     }
 }
