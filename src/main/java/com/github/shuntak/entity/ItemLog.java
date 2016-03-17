@@ -1,17 +1,25 @@
 package com.github.shuntak.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+
+import javax.persistence.*;
+import java.util.HashMap;
 
 @Entity
 public class ItemLog {
     private String itemId;
     private String apiPath;
+    @JsonIgnore
     private String apiParam;
-    private LocalDateTime logDateTime;
+    @JsonProperty("apiParam")
+    private HashMap<String, String> apiParamMap = new HashMap<>();
+    @JsonIgnore
+    private DateTime logDateTime;
+    @JsonProperty("logDateTime")
+    private String logDateTimeString;
 
     @Id
     @Column(name = "itemId", nullable = true, length = 34)
@@ -41,16 +49,31 @@ public class ItemLog {
 
     public void setApiParam(String apiParam) {
         this.apiParam = apiParam;
+        for (String param : StringUtils.split(apiParam, "&")) {
+            String[] keyVal = StringUtils.split(param, "=");
+            apiParamMap.put(keyVal[0], keyVal[1]);
+        }
+    }
+
+    @Transient
+    public HashMap<String, String> getApiParamMap() {
+        return apiParamMap;
     }
 
     @Basic
     @Column(name = "logDateTime", nullable = true)
-    public LocalDateTime getLogDateTime() {
+    public DateTime getLogDateTime() {
         return logDateTime;
     }
 
-    public void setLogDateTime(LocalDateTime logDateTime) {
+    public void setLogDateTime(DateTime logDateTime) {
         this.logDateTime = logDateTime;
+        this.logDateTimeString = logDateTime.toString("YYYY-MM-DD-hh:mm:ss");
+    }
+
+    @Transient
+    public String getLogDateTimeString() {
+        return logDateTimeString;
     }
 
     @Override

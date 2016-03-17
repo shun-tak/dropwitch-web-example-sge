@@ -3,10 +3,7 @@ package com.github.shuntak.resources;
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.shuntak.api.ResponseCommonBody;
-import com.github.shuntak.entity.Item;
-import com.github.shuntak.entity.Map;
-import com.github.shuntak.entity.Player;
-import com.github.shuntak.entity.PlayerLog;
+import com.github.shuntak.entity.*;
 import com.github.shuntak.entity.dao.*;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.commons.lang3.StringUtils;
@@ -164,6 +161,13 @@ public class RootResource {
             @QueryParam("targetItemId") String targetItemId,
             @QueryParam("newItemValue") Integer newItemValue
     ) {
+        ItemLog log = new ItemLog();
+        log.setItemId(targetItemId);
+        log.setLogDateTime(DateTime.now());
+        log.setApiPath(uriInfo.getPath());
+        log.setApiParam(uriInfo.getRequestUri().getQuery());
+        itemLogDao.save(log);
+
         Item item = (Item) itemDao.find(targetItemId).get(0);
         if (newItemValue != null) {
             item.setItemValue(newItemValue);
@@ -236,6 +240,14 @@ public class RootResource {
     @UnitOfWork
     public ResponseCommonBody getPlayerLog(@QueryParam("targetPlayerId") String targetPlayerId) {
         List<Object> logs = playerLogDao.find(targetPlayerId);
+        return new ResponseCommonBody(logs);
+    }
+
+    @GET
+    @Path("getItemLog")
+    @UnitOfWork
+    public ResponseCommonBody getItemLog(@QueryParam("targetItemId") String targetItemId) {
+        List<Object> logs = itemLogDao.find(targetItemId);
         return new ResponseCommonBody(logs);
     }
 }
