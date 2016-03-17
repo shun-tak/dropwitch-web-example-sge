@@ -286,16 +286,24 @@ public class RootResource {
     ) {
         List<Object> players = playerDao.find(targetPlayerId);
         Player player = (Player) players.get(0);
-        Map map = (Map) mapDao.find(player.getPlayerMap()).get(0);
+        List<Object> maps = mapDao.find(player.getPlayerMap());
+        if (maps.isEmpty()) {
+            return new ResponseCommonBody();
+        }
+        Map map = (Map) maps.get(0);
+
+        // itemがあるかチェック
         List<String> items = map.getMapItems();
         if (items.isEmpty()) {
             return new ResponseCommonBody();
         }
 
+        // item取得
         String getItem = items.remove(0);
         createPlayerLog(targetPlayerId);
         createItemLog(getItem);
 
+        // mapのitem更新
         String itemString = "";
         for (String item : map.getMapItems()) {
             if (itemString.equals("")) {
@@ -312,6 +320,52 @@ public class RootResource {
 
         Item item = (Item) itemDao.find(getItem).get(0);
         item.setItemValue(Math.max(0, item.getItemValue() - 10));
+
+        return new ResponseCommonBody(players);
+    }
+
+    @GET
+    @Path("hideItem")
+    @UnitOfWork
+    public ResponseCommonBody hideItem(
+            @QueryParam("targetPlayerId") String targetPlayerId
+    ) {
+        List<Object> players = playerDao.find(targetPlayerId);
+        Player player = (Player) players.get(0);
+        List<Object> maps = mapDao.find(player.getPlayerMap());
+        if (maps.isEmpty()) {
+            return new ResponseCommonBody();
+        }
+        Map map = (Map) maps.get(0);
+
+        // itemがあるかチェック
+        List<String> items = player.getPlayerItems();
+        if (items.isEmpty()) {
+            return new ResponseCommonBody();
+        }
+
+        // item取得
+        String getItem = items.remove(0);
+        createPlayerLog(targetPlayerId);
+        createItemLog(getItem);
+
+        // playerのitem更新
+        String itemString = "";
+        for (String item : player.getPlayerItems()) {
+            if (itemString.equals("")) {
+                itemString += item;
+            } else {
+                itemString += "," + item;
+            }
+        }
+        player.setPlayerItemsString(itemString);
+        playerDao.update(player);
+
+        map.setMapItemsString(map.getMapItemsString() + "," + getItem);
+        mapDao.update(map);
+
+        Item item = (Item) itemDao.find(getItem).get(0);
+        item.setItemValue(Math.min(65535, item.getItemValue() + 10));
 
         return new ResponseCommonBody(players);
     }
