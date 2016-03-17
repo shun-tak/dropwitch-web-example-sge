@@ -58,4 +58,20 @@ public class PlayerDao extends AbstractDAO<Player> {
         }
         return new ArrayList<>();
     }
+
+    public List<Object> orderByHp(boolean isAscend) {
+        StringBuilder query = new StringBuilder("from Player");
+
+        query.append(" order by playerHp");
+        if (isAscend) {
+            query.append(" asc");
+        } else {
+            query.append(" desc");
+        }
+
+        return currentSession()
+                .createQuery(query.toString())
+                .setMaxResults(20)
+                .list();
+    }
 }
