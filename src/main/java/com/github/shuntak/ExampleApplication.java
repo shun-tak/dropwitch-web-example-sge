@@ -87,6 +87,6 @@ public class ExampleApplication extends Application<ExampleConfiguration> {
 
         environment.jersey().register(JacksonMessagePackProvider.class);
         environment.jersey().register(new MasterResource(masterCommonDao));
-        environment.jersey().register(new RootResource());
+        environment.jersey().register(new RootResource(itemDao, mapDao, playerDao));
     }
 }
