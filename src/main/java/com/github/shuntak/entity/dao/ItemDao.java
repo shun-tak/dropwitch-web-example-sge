@@ -36,4 +36,20 @@ public class ItemDao extends AbstractDAO<Item> {
     public void update(Item item) {
         currentSession().update(item);
     }
+
+    public List<Object> orderByValue(boolean isAscend) {
+        StringBuilder query = new StringBuilder("from Item");
+
+        query.append(" order by itemValue");
+        if (isAscend) {
+            query.append(" asc");
+        } else {
+            query.append(" desc");
+        }
+
+        return currentSession()
+                .createQuery(query.toString())
+                .setMaxResults(20)
+                .list();
+    }
 }

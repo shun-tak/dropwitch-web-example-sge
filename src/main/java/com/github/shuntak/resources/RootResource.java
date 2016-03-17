@@ -552,6 +552,16 @@ public class RootResource {
         return new ResponseCommonBody(players);
     }
 
+    @GET
+    @Path("rankItemValue")
+    @UnitOfWork
+    public ResponseCommonBody rankItemValue(
+            @QueryParam("isAscend") boolean isAscend
+    ) {
+        List<Object> items = itemDao.orderByValue(isAscend);
+        return new ResponseCommonBody(items);
+    }
+
     private void createPlayerLog(String targetPlayerid) {
         PlayerLog log = new PlayerLog();
         log.setPlayerId(targetPlayerid);
